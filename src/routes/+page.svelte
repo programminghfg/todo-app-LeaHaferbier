@@ -1,12 +1,13 @@
-<!-- Code mit Nina zusammen erstellt, Hilfe von ihrem Bruder :o -->
-
 <script>
     import { onMount } from "svelte";
     import { browser } from "$app/environment";
+    import ToDo from "../lib/components/ToDo.svelte";
+
     let immerFalse = false;
     let todoText = "";
     let todos = [];
     let draggedTodo;
+
     onMount(() => {
         if (browser) {
             const storedTodos = JSON.parse(localStorage.getItem("todos"));
@@ -77,6 +78,7 @@
             event.target.classList.toggle("drag-target-current");
         }}
     />
+    <!--Component ausgeschnitten-->
     <div
         id={index}
         class="todo-entry"
@@ -84,11 +86,7 @@
         draggable="true"
         on:dragstart={(event) => (draggedTodo = event.target.id)}
     >
-        <!-- checkboxen -->
-        <input type="checkbox" bind:checked={todo.done} on:change={saveTodos} />
-        <!-- text -->
-        <div>{todo.text}</div>
-        <button class="delete" on:click={() => remove(index)}>X</button>
+        <ToDo todoData={todo} {index} on:removeEvent={remove} />
     </div>
 {/each}
 <hr
@@ -109,21 +107,6 @@
 />
 
 <style>
-    .delete {
-        background-color: white;
-        border: none;
-    }
-    .delete:hover {
-        background-color: grey;
-        font-weight: 700;
-    }
-    .done {
-        color: grey;
-        text-decoration: line-through;
-    }
-    .todo-entry {
-        display: flex;
-    }
     .drag-target {
         height: 5px;
         color: rgba(0, 0, 0, 0);
